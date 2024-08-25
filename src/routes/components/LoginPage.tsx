@@ -1,0 +1,24 @@
+import React, { useState } from 'react';
+import { useUsuario } from '../context/UserContext';
+
+const LoginPage = () => {
+  const { setUsuario } = useUsuario();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulación de login
+    setUsuario({ nombre: 'Juan Pérez', correo: email, autenticado: true });
+  };
+
+  return (
+    <form onSubmit={handleLogin}>
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+      <button type="submit">Login</button>
+    </form>
+  );
+};
+
+export default LoginPage;

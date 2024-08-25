@@ -9,6 +9,7 @@ interface Usuario {
 interface UsuarioContextType {
   usuario: Usuario | null;
   setUsuario: React.Dispatch<React.SetStateAction<Usuario | null>>;
+  logout: () => void; // Añade la función de logout al contexto
 }
 
 export const UsuarioContext = createContext<UsuarioContextType | undefined>(undefined);
@@ -24,8 +25,12 @@ export const UsuarioProvider = ({ children }: UsuarioProviderProps) => {
     autenticado: true
   });
 
+  const logout = () => {
+    setUsuario(null); // Aquí se actualiza el estado del usuario para reflejar que no está autenticado
+  };
+
   return (
-    <UsuarioContext.Provider value={{ usuario, setUsuario }}>
+    <UsuarioContext.Provider value={{ usuario, setUsuario, logout }}>
       {children}
     </UsuarioContext.Provider>
   );
