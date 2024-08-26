@@ -1,15 +1,16 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useState, useEffect } from 'react';
 
 interface Usuario {
   nombre: string;
   correo: string;
+  password: string;
   autenticado: boolean;
 }
 
 interface UsuarioContextType {
   usuario: Usuario | null;
   setUsuario: React.Dispatch<React.SetStateAction<Usuario | null>>;
-  logout: () => void; // Añade la función de logout al contexto
+  logout: () => void;
 }
 
 export const UsuarioContext = createContext<UsuarioContextType | undefined>(undefined);
@@ -19,15 +20,25 @@ interface UsuarioProviderProps {
 }
 
 export const UsuarioProvider = ({ children }: UsuarioProviderProps) => {
-  const [usuario, setUsuario] = useState<Usuario | null>({
-    nombre: 'Juan',
-    correo: 'juan@example.com',
-    autenticado: true
-  });
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('usuario');
+    if (storedUser) {
+      setUsuario(JSON.parse(storedUser));
+    }
+  }, []);
 
   const logout = () => {
-    setUsuario(null); // Aquí se actualiza el estado del usuario para reflejar que no está autenticado
+    setUsuario(null);
+    localStorage.removeItem('usuario');
   };
+
+  useEffect(() => {
+    if (usuario) {
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+    }
+  }, [usuario]);
 
   return (
     <UsuarioContext.Provider value={{ usuario, setUsuario, logout }}>

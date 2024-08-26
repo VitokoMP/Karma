@@ -13,6 +13,7 @@ export const KarmaApp = () => {
         <Route path="/Login" element={<LoginPage />} />
         
         {/* Define otras rutas aquí */}
+        
       </Routes>
     </>
   );
